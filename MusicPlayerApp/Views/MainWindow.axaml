@@ -1,0 +1,94 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:converters="clr-namespace:MusicPlayerApp.Converters"
+        xmlns:vm="using:MusicPlayerApp.ViewModels"
+        xmlns:v="using:MusicPlayerApp.Views"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="640" d:DesignHeight="480"
+		Width="640" Height="480"
+        x:Class="MusicPlayerApp.Views.MainWindow"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="Avalonia Music Player"
+		TransparencyLevelHint="AcrylicBlur"
+        Background="Transparent"
+		ExtendClientAreaToDecorationsHint="True"
+		CanResize="True"
+		WindowStartupLocation="CenterScreen">
+
+    <Design.DataContext>
+        <vm:MainWindowViewModel/>
+    </Design.DataContext>
+
+	<Window.Resources>
+		<converters:TimeConverter x:Key="timeConverter"/>
+
+		<Bitmap x:Key="Play">
+			<x:Arguments>
+				<x:String>Assets/play.png</x:String>
+			</x:Arguments>
+		</Bitmap>
+	</Window.Resources>
+
+	<Window.Styles>
+		<Style Selector=":is(v|SpinningImage)[IsSpinning=true]">
+			<Style.Animations>
+				<Animation Duration="0:0:5" IterationCount="INFINITE">
+					<KeyFrame Cue="0%">
+						<Setter Property="RotateTransform.Angle" Value="0"/>
+					</KeyFrame>
+					<KeyFrame Cue="100%">
+						<Setter Property="RotateTransform.Angle" Value="360"/>
+					</KeyFrame>
+				</Animation>
+			</Style.Animations>
+		</Style>
+	</Window.Styles>
+
+	<Panel>
+		<ExperimentalAcrylicBorder IsHitTestVisible="False">
+			<ExperimentalAcrylicBorder.Material>
+				<ExperimentalAcrylicMaterial
+					BackgroundSource="Digger"
+					TintColor="Black"
+					TintOpacity="1"
+					MaterialOpacity="0.65" />
+			</ExperimentalAcrylicBorder.Material>
+		</ExperimentalAcrylicBorder>
+		<Grid RowDefinitions="auto, *" ShowGridLines="False">
+			<Grid Grid.Row="0" ColumnDefinitions="auto, *">
+				<Grid Grid.Column="0" ColumnDefinitions="auto, *" ShowGridLines="False">
+					<DockPanel Grid.Column="0">
+						<Menu DockPanel.Dock="Top">
+							<MenuItem Header="_File">
+								<MenuItem Header="_Open..." Command="{Binding Open}" InputGesture="Ctrl + O" HotKey="Ctrl + O"/>
+								<Separator/>
+								<MenuItem Header="_Exit" Command="{Binding Exit}" InputGesture="Alt + F4" HotKey="Alt + F4"/>
+							</MenuItem>
+							<MenuItem Header="Volume" Command="{Binding Volume}"/>
+						</Menu>
+					</DockPanel>
+				</Grid>
+				<TextBlock Text="{Binding Name}" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center" IsHitTestVisible="False"/>
+			</Grid>
+			<Grid Grid.Row="1" RowDefinitions="4*, *" ShowGridLines="False">
+
+				<Button Grid.Row="0" Background="Transparent" Command="{Binding Play}" 
+						Width="150" Height="150" HorizontalAlignment="Center" VerticalAlignment="Center">
+					<v:SpinningImage IsSpinning="{Binding IsSpinning}" Source="{DynamicResource Play}"/>
+				</Button>
+				
+				<Grid Grid.Row="1" ColumnDefinitions="15, 50, *, 50, 15">
+					<TextBlock Grid.Column="1" Text="{Binding TimePassed, Mode=OneWay, 
+							   Converter={StaticResource timeConverter} ConverterParameter=False}"
+							   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+					<Slider x:Name="slider" Grid.Column="2" Value="{Binding Slider, Mode=TwoWay}" VerticalAlignment="Center"/>
+					<TextBlock Grid.Column="3" Text="{Binding TimeRemaining, Mode=OneWay, 
+							   Converter={StaticResource timeConverter} ConverterParameter=True}"
+							   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+				</Grid>
+			</Grid>
+		</Grid>
+	</Panel>
+
+</Window>

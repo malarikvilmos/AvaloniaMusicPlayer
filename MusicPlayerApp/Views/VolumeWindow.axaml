@@ -1,0 +1,39 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:vm="using:MusicPlayerApp.ViewModels"
+        mc:Ignorable="d" d:DesignWidth="200" d:DesignHeight="50"
+        x:Class="MusicPlayerApp.Views.VolumeWindow"
+        Title="VolumeWindow"
+		TransparencyLevelHint="AcrylicBlur"
+        Background="Transparent"
+		ExtendClientAreaToDecorationsHint="True"
+		Width="200" Height="80"
+		CanResize="True"
+		WindowStartupLocation="CenterOwner"
+		>
+
+	<Design.DataContext>
+		<vm:MainWindowViewModel/>
+	</Design.DataContext>
+
+	<Panel>
+		<ExperimentalAcrylicBorder IsHitTestVisible="False">
+			<ExperimentalAcrylicBorder.Material>
+				<ExperimentalAcrylicMaterial
+					BackgroundSource="Digger"
+					TintColor="Black"
+					TintOpacity="1"
+					MaterialOpacity="0.65" />
+			</ExperimentalAcrylicBorder.Material>
+		</ExperimentalAcrylicBorder>
+
+		<Grid RowDefinitions="*, 2*">
+			<Grid Grid.Row="1" ColumnDefinitions="20, 4*, 10, *, 20">
+				<Slider Grid.Column="1" VerticalAlignment="Center" Value="{Binding VolumeSlider}"/>
+				<TextBlock Grid.Column="3" HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding VolumeValue}"/>
+			</Grid>
+		</Grid>
+	</Panel>
+</Window>
